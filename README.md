@@ -1,38 +1,36 @@
-# Iyengar Practice Timer — PWA v1.3
+# Iyengar Practice Timer — PWA v1.3.1
 
-## New: persistent pronunciation corrections
+## Critical fix from v1.3
 
-Any edit to a pose's `Say` field is now saved automatically in a separate pronunciation dictionary.
+PWA v1.3 had an initialization-order bug:
+`loadState()` ran before the pronunciation override dictionary had been initialized.
 
-Example:
-- Vrksasana default: `Vrik, shah, sah, nah`
-- User correction: `Vreek, shah, sah, nah`
+That JavaScript error stopped the rest of the app initialization, which could make the
+sequence area empty and prevent voice/settings controls from populating normally.
 
-Once corrected, the app will reuse `Vreek, shah, sah, nah` whenever Vrksasana is:
-- already in the current sequence
-- added again from the Level 1 library
-- loaded through a preset
-- restored after Reset Defaults
+PWA v1.3.1 fixes the initialization order.
 
-Pronunciation overrides are stored separately from the current sequence.
+## Your existing data
 
-## Backup / restore
+The v1.3 bug occurred during page startup and did not intentionally erase localStorage.
+Your previously saved sequence/settings should therefore still be present on the phone.
 
-The Setup screen now includes:
-- Export pronunciations
-- Import pronunciations
+Pronunciation corrections remain persistent and separate:
+- Edit any pose's `Say` field.
+- The correction is saved for that asana.
+- It is reused when the pose is added again or loaded from a preset.
+- Export/Import pronunciation backup remains available.
 
-Export creates `iyengar-pronunciations.json`.
-This protects your corrections in case browser/PWA storage is ever cleared.
+## Deploy
 
-## Updating GitHub Pages
-
-Replace the repository files with this package and commit/push them.
+Replace the GitHub repository files with this package and commit/push.
 
 Then:
 1. Open the hosted URL in Chrome.
-2. Confirm `PWA v1.3` is shown.
+2. Verify `PWA v1.3.1` appears under Sequence timer.
 3. Tap `Refresh app files`.
-4. Reopen the installed PWA.
+4. Fully close the installed PWA.
+5. Reopen it.
 
-Existing local sequence/settings should remain in browser storage.
+Do not clear site data or uninstall the PWA before checking whether your previous local
+settings have returned.
