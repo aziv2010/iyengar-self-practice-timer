@@ -1,4 +1,4 @@
-const CACHE = "iyengar-practice-timer-pwa-v1";
+const CACHE = "iyengar-practice-timer-pwa-v1-1";
 const CORE = [
   "./",
   "./index.html",
