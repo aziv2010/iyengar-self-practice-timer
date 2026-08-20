@@ -1,4 +1,4 @@
-const CACHE = "iyengar-practice-timer-pwa-v1-1";
+const CACHE = "iyengar-practice-timer-pwa-v1-2";
 const CORE = [
   "./",
   "./index.html",
@@ -23,16 +23,40 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
+self.addEventListener("message", event => {
+  if(event.data && event.data.type === "SKIP_WAITING"){
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("fetch", event => {
   if(event.request.method !== "GET") return;
+
+  const isNavigation = event.request.mode === "navigate";
+
+  if(isNavigation){
+    // Always prefer the newest HTML from GitHub Pages.
+    event.respondWith(
+      fetch(event.request, {cache:"no-store"})
+        .then(response => {
+          const copy=response.clone();
+          caches.open(CACHE).then(cache => cache.put("./index.html", copy));
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
+  // Static files: return cached copy immediately, update cache in background.
   event.respondWith(
     caches.match(event.request).then(cached => {
-      if(cached) return cached;
-      return fetch(event.request).then(response => {
-        const copy = response.clone();
+      const network = fetch(event.request).then(response => {
+        const copy=response.clone();
         caches.open(CACHE).then(cache => cache.put(event.request, copy));
         return response;
-      }).catch(() => caches.match("./index.html"));
+      }).catch(() => cached);
+      return cached || network;
     })
   );
 });

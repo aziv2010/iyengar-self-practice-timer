@@ -1,7 +1,7 @@
 {
   "name": "Iyengar Practice Timer",
   "short_name": "Iyengar Timer",
-  "description": "Hands-free Iyengar yoga pose sequence timer",
+  "description": "Hands-free Iyengar yoga pose sequence timer \u2014 PWA v1.2",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -1,30 +1,37 @@
-# Iyengar Practice Timer — PWA v1.1
+# Iyengar Practice Timer — PWA v1.2
 
-This fixes the duplicate preparation countdown in PWA v1.
+This build addresses the stale-installed-app problem seen on Samsung/Chrome.
 
-PWA v1 inherited two mechanisms:
-1. per-pose `Setup sec`
-2. global `Delay after pose name`
+## What happened
+The live GitHub Pages site had already been updated to PWA v1.1, but the installed PWA was still running the older cached app shell. The screenshots proved this because the installed app still showed:
+- no version label under Sequence timer
+- a separate SETUP stage
+- spoken "Prepare for"
 
-That produced:
-`Setup countdown → Get Ready countdown → pose timer`
+Those elements do not exist in the current source.
 
-PWA v1.1 removes the separate Setup interval completely.
+## What v1.2 changes
+- Adds a visible `PWA v1.2` build label.
+- Adds a `Refresh app files` button under Install on phone.
+- Service worker now uses **network-first** for the HTML page.
+- Service worker cache version is bumped again.
+- Service-worker updates use `updateViaCache: "none"`.
+- New workers call `skipWaiting()` and `clients.claim()` so updates activate promptly.
+- Controller changes automatically reload the app.
 
-The flow is now:
-`Pose name spoken → one configurable countdown in the clock face → pose timer`
+## Intended practice flow
+`pose name spoken → one numeric preparation countdown in the clock face → pose timer`
 
-The single preparation control is **Delay after pose name**.
+There is no separate Setup stage and no spoken "Prepare for".
 
-The working screen-wake behavior is unchanged.
+## Deploy
+Replace all repository files with this package and commit/push.
 
-## Update GitHub Pages
-Replace the existing repository files with this package and commit/push.
-
-The service-worker cache version has been bumped. If the installed app still shows the old behavior:
+Then on Samsung:
 1. Open the GitHub Pages URL in Chrome while online.
-2. Refresh once.
-3. Close the installed PWA completely.
-4. Reopen it from the home screen.
+2. Confirm `PWA v1.2` appears under Sequence timer.
+3. Tap `Refresh app files`.
+4. Close the installed PWA completely.
+5. Reopen it from the home screen.
 
-The Setup screen should display `PWA v1.1`.
+If the installed PWA still does not show v1.2, uninstall the home-screen PWA and reinstall it from the hosted URL.
